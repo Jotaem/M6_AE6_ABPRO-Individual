@@ -1,0 +1,8 @@
+{% extends 'eventos/base.html' %}
+
+{% block content %}
+    <h2>{{ object.nombre }}</h2>
+    <p>{{ object.descripcion }}</p>
+    <p><strong>Fecha:</strong> {{ object.fecha|date:"d/m/Y H:i" }}</p>
+    <p><strong>Organizador:</strong> {{ object.organizador.username }}</p>
+{% endblock %}

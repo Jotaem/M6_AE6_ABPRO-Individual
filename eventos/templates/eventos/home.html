@@ -1,0 +1,42 @@
+{% extends 'eventos/base.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 40px;">
+    <h1>Plataforma de Gestión de Eventos</h1>
+    <h2>Organiza eventos con Django</h2>
+    
+    {% if user.is_authenticated %}
+        <h3 style="margin-bottom: 30px;">¡Bienvenido {{ user.username }}!</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <a href="{% url 'lista_eventos' %}" 
+               style="padding: 10px 20px; background-color: #007bff; color: white;
+                      text-decoration: none; border-radius: 5px; display: inline-block;">
+                Ver mis eventos
+            </a>
+        </div>
+        
+        <div>
+            <a href="{% url 'crear_evento' %}" 
+               style="padding: 10px 20px; background-color: #007bff; color: white;
+                      text-decoration: none; border-radius: 5px; display: inline-block;">
+                Crear nuevo evento
+            </a>
+        </div>
+    {% else %}
+        <p style="margin-bottom: 20px;">Para continuar, por favor, inicia sesión o regístrate.</p>
+        <div style="margin-top: 20px;">
+            <a href="{% url 'login' %}" 
+               style="padding: 10px 20px; background-color: #007bff; color: white;
+                      text-decoration: none; border-radius: 5px; margin-right: 15px;">
+                Iniciar Sesión
+            </a>
+            <a href="{% url 'registro' %}" 
+               style="padding: 10px 20px; background-color: #28a745; color: white;
+                      text-decoration: none; border-radius: 5px;">
+                Registrarse
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

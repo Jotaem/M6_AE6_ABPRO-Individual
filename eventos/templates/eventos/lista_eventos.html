@@ -1,0 +1,47 @@
+{% extends 'eventos/base.html' %}
+
+{% block page_title %}Mis Eventos{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Mis Eventos</h2>
+        <a href="{% url 'crear_evento' %}" class="btn btn-primary">+ Crear un nuevo evento</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre del Evento</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evento in eventos %}
+                <tr>
+                    <td><a href="{% url 'detalle_evento' evento.pk %}">{{ evento.nombre }}</a></td>
+                    <td>{{ evento.fecha|date:"d/m/Y" }}</td>
+                    <td>
+                        {% if user == evento.organizador or user.is_staff %}
+                            <a href="{% url 'editar_evento' evento.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        {% endif %}
+                        {% if user.is_staff %}
+                            <a href="{% url 'eliminar_evento' evento.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">
+                        <div class="alert alert-info text-center">
+                            <p class="mb-0">No hay eventos para mostrar.</p>
+                            <a href="{% url 'crear_evento' %}" class="btn btn-primary mt-2">+ Crear un nuevo evento</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
