@@ -1,0 +1,84 @@
+{% extends 'productos/base.html' %}
+
+{% block title %}Inicio - Jona Market{% endblock %}
+
+{% block content %}
+<div class="container">
+    <style>
+        /* Reducir la altura del carrusel y fijarla (≈60% menos que un hero grande) */
+        .carousel-fixed {
+            height: 160px; /* altura fija; ajustable si quieres otro valor */
+            overflow: hidden;
+        }
+        .carousel-fixed .carousel-inner {
+            height: 100%;
+        }
+        .carousel-fixed .carousel-item img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover; /* recorta la imagen para llenar el contenedor */
+        }
+        @media (min-width: 1200px) {
+            /* en pantallas grandes conservar proporción pero aún reducido */
+            .carousel-fixed { height: 200px; }
+        }
+    </style>
+    <!-- Hero Section -->
+    <div class="row my-5">
+        <div class="col-12">
+            <div id="carouselExampleIndicators" class="carousel slide carousel-fixed" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/media/carousel/slide1.jpg" class="d-block w-100" alt="Slide 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/media/carousel/slide2.jpg" class="d-block w-100" alt="Slide 2">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products Section -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Ofertas de la semana</h2>
+        </div>
+        {% for producto in productos|slice:":4" %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'detalle_producto' producto.pk %}">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: contain; padding: 10px;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/200x200.png?text=Sin+Imagen" class="card-img-top" alt="Imagen no disponible" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text fs-4">$ {{ producto.precio|floatformat:0 }}</p>
+                        <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-primary">Ver producto</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay productos para mostrar.</p>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'lista_productos' %}" class="btn btn-outline-primary">Ver todos los productos</a>
+    </div>
+</div>
+{% endblock %}

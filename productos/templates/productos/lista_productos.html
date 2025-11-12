@@ -1,0 +1,97 @@
+{% extends 'productos/base.html' %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+    <style>
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #e6e6e6;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            transition: box-shadow .2s ease-in-out;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-card:hover {
+            box-shadow: 0 4px 16px 0 rgba(0,0,0,.2);
+        }
+        .product-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .product-image-container {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .product-image-container img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .product-price {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 5px;
+        }
+        .product-name {
+            font-size: 14px;
+            color: #333;
+        }
+        .product-actions {
+            padding: 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Productos</h2>
+        {% if user.is_authenticated %}
+        <a href="{% url 'crear_producto' %}" class="btn btn-primary">Vender</a>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for producto in productos %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="product-card">
+                    <a href="{% url 'detalle_producto' producto.pk %}">
+                        <div class="product-image-container">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/200x200.png?text=Sin+Imagen" alt="Imagen no disponible">
+                            {% endif %}
+                        </div>
+                        <div class="product-info">
+                            <p class="product-price">$ {{ producto.precio|floatformat:0 }}</p>
+                            <p class="product-name">{{ producto.nombre }}</p>
+                        </div>
+                    </a>
+                    <div class="product-actions">
+                        <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-sm btn-outline-primary">Ver más</a>
+                        {% if user.is_authenticated %}
+                        <div>
+                            <a href="{% url 'editar_producto' producto.pk %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                            {% if user.is_superuser or 'Administradores' in user.groups.all.0.name %}
+                            <a href="{% url 'eliminar_producto' producto.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p>No hay productos disponibles.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

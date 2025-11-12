@@ -1,0 +1,9 @@
+{% extends 'productos/base.html' %}
+
+{% block title %}Acceso Denegado{% endblock %}
+
+{% block content %}
+    <h1>Acceso Denegado</h1>
+    <p>No tienes permiso para realizar esta acción.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Volver al inicio</a>
+{% endblock %}

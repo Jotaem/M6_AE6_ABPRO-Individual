@@ -1,0 +1,62 @@
+{% extends 'productos/base.html' %}
+
+{% block title %}{{ object.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="text-center mb-4">
+                        {% if object.imagen %}
+                            <img src="{{ object.imagen.url }}" alt="{{ object.nombre }}" class="img-fluid rounded" style="max-height: 500px;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/500x500.png?text=Sin+Imagen" alt="Imagen no disponible" class="img-fluid rounded">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="p-3">
+                        <h1 class="h3">{{ object.nombre }}</h1>
+                        <hr>
+                        <p class="display-4 my-4">$ {{ object.precio|floatformat:0 }}</p>
+                        
+                        <p class="h5 mb-3">Lo que tenés que saber de este producto</p>
+                        <ul>
+                            <li><strong>Stock disponible:</strong> {{ object.stock }} unidades</li>
+                            <!-- Puedes agregar más detalles aquí -->
+                        </ul>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button class="btn btn-primary btn-lg" style="background-color: #3483fa; border-color: #3483fa;">Comprar ahora</button>
+                            <button class="btn btn-outline-primary btn-lg">Agregar al carrito</button>
+                        </div>
+                        
+                        {% if user.is_authenticated %}
+                        <div class="mt-4 border-top pt-3">
+                            <small>Acciones de administrador:</small><br>
+                            <a href="{% url 'editar_producto' object.pk %}" class="btn btn-outline-secondary btn-sm mt-2">Editar</a>
+                            {% if user.is_superuser or 'Administradores' in user.groups.all.0.name %}
+                            <a href="{% url 'eliminar_producto' object.pk %}" class="btn btn-outline-danger btn-sm mt-2">Eliminar</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="border-top pt-4">
+                        <h3>Descripción</h3>
+                        <p class="lead">{{ object.descripcion|linebreaks }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <a href="{% url 'lista_productos' %}" class="btn btn-link">← Volver al listado</a>
+    </div>
+</div>
+{% endblock %}
