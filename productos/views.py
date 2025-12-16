@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Producto
 
@@ -40,3 +42,14 @@ class ProductoDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def acceso_denegado(request):
     return render(request, 'productos/acceso_denegado.html')
+
+def registro(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/registro.html', {'form': form})
+

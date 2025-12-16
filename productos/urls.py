@@ -7,10 +7,12 @@ from .views import (
     ProductoUpdateView,
     ProductoDeleteView,
     acceso_denegado,
+    registro,
 )
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('registro/', registro, name='registro'),
     path('productos/', ProductoListView.as_view(), name='lista_productos'),
     path('productos/<int:pk>/', ProductoDetailView.as_view(), name='detalle_producto'),
     path('productos/crear/', ProductoCreateView.as_view(), name='crear_producto'),
